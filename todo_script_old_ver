@@ -1,0 +1,217 @@
+window.addEventListener('DOMContentLoaded', function() {
+ 
+var TDinput =  document.getElementById('TDinput');
+TDinput.focus();
+
+
+
+TDinput.addEventListener('keyup', addElement());
+
+  function addElement (e) {
+
+    if (e.keyCode === 13 && this.value !== ''){
+
+
+
+
+    /* variant # 1 */
+
+      var list = document.querySelector('ul'),
+          listElement = document.createElement('li'),
+          // txt = document.createElement('input'),
+          // label = document.createElement('label'),
+          // btnEdit = document.createElement('input'),
+          // btnRemove = document.createElement('input'),
+          // chkBox = document.createElement('input');
+      
+     /* variant # 2 */ 
+          // str = '<input  type = "checkbox" Class = "chkBox"/> \
+          //         <label>' + this.value + '</label> \
+          //         <input  type = "textarea" Class = "txtArea" style="display:none;" value = "' + this.value + '"/> \
+          //         <input  type = "button" Class = "btnEdit" value = "edit"/> <input  type = "button" Class = "btnRemove" value = "remove"/>';  
+
+          str = '<div Class = "defaultContainer"> <input  type = "checkbox" Class = "chkBox"/> \
+                  <label Class = "label">' + this.value + '</label> \
+                  <input  type = "button" Class = "btnEdit" value = "edit"/> <input  type = "button" Class = "btnRemove" value = "remove"/> \
+                  </div> <div Class = "editContainer"> <input  type = "textarea" Class = "txtArea" value = "' + this.value + '"/> \
+                  <input  type = "button" Class = "btnSave" value = "save"/> </div>'; 
+
+      // txt.type = 'textarea';
+      // txt.style.display = 'none';
+      // txt.value = label.textContent = this.value;
+      // txt.className = 'txtArea';
+
+      // btnEdit.type = 'button';
+      // btnEdit.value = 'edit';
+      // btnEdit.className = 'btnEdit';
+      
+      // btnRemove.type = 'button';
+      // btnRemove.value = 'remove';
+      // btnRemove.className = 'btnRemove';
+
+      // chkBox.type = 'checkbox';
+      // chkBox.className = 'chkBox';
+
+
+      // listElement.appendChild(chkBox);
+      // listElement.appendChild(label);
+      // listElement.appendChild(txt);      
+      // listElement.appendChild(btnEdit);
+      // listElement.appendChild(btnRemove); 
+
+      listElement.style.listStyle = 'none';
+      
+      //Listeners of events
+      // btnEdit.addEventListener('click', editAction);
+      // btnRemove.addEventListener('click', removeAction);
+      // txt.addEventListener('keyup', txtAction);
+      // txt.addEventListener('blur', txtFocusOut);
+      //chkBox.addEventListener('click', checkOut);
+      
+      //list.appendChild(listElement);
+
+      listElement.innerHTML = str;
+      list.insertBefore(listElement);
+
+      list.addEventListener('click', listHandler);
+
+     /* variant # 2   
+
+      var list = document.querySelector('ul');
+
+
+      list.lastChild.value !== undefined ? list.lastChild.insertAdjacentHTML('afterend', str) : list.innerHTML = str;
+      var listLi = list.lastChild;
+
+      //Listeners of events
+      list.querySelector('input[type=button]').addEventListener('click', editAction);
+      list.querySelector('input[type=button]')[1].addEventListener('click', removeAction);
+      list.querySelector('input[type=textarea]').addEventListener('keyup', txtAction);
+      list.querySelector('input[type=textarea]').addEventListener('blur', txtFocusOut);
+      list.querySelector('input[type=checkbox]').addEventListener('click', checkOut); */
+      
+      this.value = '';   
+    };
+
+    // document.querySelector('ul').addEventListener('click', listHandler);
+  
+  };
+  
+
+
+  function editAction (obj) {
+
+    var defaultContainer = obj.parentNode,
+        editContainer = defaultContainer.parentNode.getElementsByClassName('editContainer')[0],
+        txtArea = editContainer.getElementsByClassName('txtArea')[0];
+
+    defaultContainer.classList.add('hide');
+    editContainer.classList.add('active');
+
+    txtArea.focus();
+    // obj.parentNode.getElementsByClassName('txtArea')[0].style.display = 'inline-block';
+    // obj.parentNode.getElementsByClassName('txtArea')[0].focus();
+
+    // obj.parentNode.querySelector('label').style.display = 'none';
+    // obj.parentNode.querySelector('input[type=checkbox]').style.display = 'none';
+    // obj.parentNode.querySelector('input[type=button]').style.display = 'none';
+    
+    
+    //add listeners to text area
+    // obj.parentNode.querySelector('input[type=textarea]').addEventListener('keyup', txtAction);
+    // obj.parentNode.querySelector('input[type=textarea]').addEventListener('blur', txtFocusOut);
+
+  };
+  
+  function removeAction (obj) {
+
+    obj.parentNode.parentNode.parentNode.removeChild(obj.parentNode.parentNode);
+    
+  };
+
+  // function txtAction () {
+
+  //   this.parentNode.querySelector('label').textContent = this.value; 
+
+  // };
+
+  // function txtFocusOut () {
+
+  //     this.parentNode.querySelector('input[type=checkbox]').style.display = 'inline-block';
+  //     this.parentNode.querySelector('label').style.display = 'inline-block';
+  //     this.parentNode.querySelector('input[type=button]').style.display = 'inline-block';
+  //     this.parentNode.querySelector('input[type=textarea]').style.display = 'none';
+
+  // };
+
+  function saveAction (obj) {
+
+    var editContainer = obj.parentNode,
+        defaultContainer = editContainer.parentNode.getElementsByClassName('defaultContainer')[0],
+        label = defaultContainer.getElementsByClassName('label')[0],
+        txtArea = editContainer.getElementsByClassName('txtArea')[0];
+
+
+    label.textContent = txtArea.value;
+    
+    defaultContainer.classList.remove('hide');    
+    editContainer.classList.remove('active');
+
+  };
+
+  function checkOut (obj) {
+      
+      var label = obj.parentNode.getElementsByClassName('label')[0].classList;
+
+      obj.checked ?  label.add('marked') : label.remove('marked');
+
+  };
+
+  function listHandler(e) {
+
+    var targetObj = e.target;
+
+    switch(targetObj.className) {
+
+      case 'btnRemove':
+
+         removeAction(targetObj);
+        break;
+
+      case 'btnEdit':
+
+         editAction(targetObj);
+         // console.log(e.type === 'click');
+        break;
+
+      case 'btnSave':
+
+         saveAction(targetObj);
+         // console.log(e.type === 'click');
+        break;        
+
+      //case 'txtArea':
+
+        // if (e.type === 'keyup') {
+        //   txtAction(targetObj);
+        // }
+        // else if (e.type === 'blur') {
+        //   txtFocusOut(targetObj);
+        // }
+        // else {
+
+        // }
+       
+        //break;        
+
+      case 'chkBox':
+      
+         checkOut(targetObj);
+        break;          
+
+    }
+    
+  };
+
+
+});
