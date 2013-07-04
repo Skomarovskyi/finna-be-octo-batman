@@ -1,0 +1,25 @@
+.defaultContainer {
+  display: inline-block
+}
+
+.defaultContainer.hide {
+	display: none
+}
+
+.editContainer {
+	display: none
+}
+
+.editContainer.active {
+	display: inline-block
+}
+
+.label.marked {
+	text-decoration : line-through;
+	color : grey;
+	font-style : italic
+}
+
+li {
+	list-style: none
+}
