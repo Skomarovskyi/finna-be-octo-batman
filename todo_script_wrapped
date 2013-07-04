@@ -1,0 +1,121 @@
+window.addEventListener('DOMContentLoaded', function() {
+
+var todoApplication = {};
+
+;(function () {
+  
+	var TDinput =  document.getElementById('TDinput'),
+	 	list = document.querySelector('ul');
+
+
+
+	TDinput.focus();
+
+
+	todoApplication.Component = {
+
+		initialize : function () {
+			var that = this;
+
+			TDinput.addEventListener('keyup', function (e) {that.addElement(e); }); // ?? whithout inner func this look to todoApplication ?
+			list.addEventListener('click', function (e) { that.listHandler(e); });
+		},
+
+		addElement : function (e) {
+
+	    var targetObj = e.target,
+	    	str,
+            listElement = document.createElement('li');
+
+			if (e.keyCode === 13 && targetObj.value !== ''){
+
+				str = '<div Class = "defaultContainer"> <input  type = "checkbox" Class = "chkBox"/> \
+                  <label Class = "label">' + targetObj.value + '</label> \
+                  <input  type = "button" Class = "btnEdit" value = "edit"/> <input  type = "button" Class = "btnRemove" value = "remove"/> \
+                  </div> <div Class = "editContainer"> <input  type = "textarea" Class = "txtArea" value = "' + targetObj.value + '"/> \
+                  <input  type = "button" Class = "btnSave" value = "save"/> </div>';
+
+				listElement.innerHTML = str;
+      			list.insertBefore(listElement);
+
+
+      			targetObj.value = '';
+			};
+		},
+
+		listHandler : function (e) {
+
+    		var targetObj = e.target;
+
+    		switch(targetObj.className) {
+
+      			case 'btnRemove':
+         			this.removeAction(targetObj); // ?? how to access by another way
+        	 	  break;
+
+      			case 'btnEdit':
+         			this.editAction(targetObj);
+        	 	  break;
+
+      			case 'btnSave':
+         			this.saveAction(targetObj);
+        	 	  break; 
+
+      			case 'chkBox':
+         			this.checkOut(targetObj);
+        	 	  break;
+        	 }
+		},
+
+		removeAction : function (obj) {
+
+			obj.parentNode.parentNode.parentNode.removeChild(obj.parentNode.parentNode);
+			// var bar  =  {};
+			foo = function () { this};
+			this.foo();
+		},
+
+		editAction : function(obj) {
+
+    		var defaultContainer = obj.parentNode,
+        		editContainer = defaultContainer.parentNode.getElementsByClassName('editContainer')[0],
+        		txtArea = editContainer.getElementsByClassName('txtArea')[0];
+
+    		defaultContainer.classList.add('hide');
+    		editContainer.classList.add('active');
+
+    		txtArea.focus();			
+
+		},
+
+		saveAction : function (obj) {
+
+    		var editContainer = obj.parentNode,
+        		defaultContainer = editContainer.parentNode.getElementsByClassName('defaultContainer')[0],
+        		label = defaultContainer.getElementsByClassName('label')[0],
+        		txtArea = editContainer.getElementsByClassName('txtArea')[0];
+
+
+    		label.textContent = txtArea.value;
+    
+    		defaultContainer.classList.remove('hide');    
+    		editContainer.classList.remove('active');			
+
+		},
+
+		checkOut : function (obj) {
+
+      		var label = obj.parentNode.getElementsByClassName('label')[0].classList;
+
+      		obj.checked ?  label.add('marked') : label.remove('marked');			
+
+		}
+
+	};
+
+
+	todoApplication.Component.initialize();
+
+}());
+
+});
